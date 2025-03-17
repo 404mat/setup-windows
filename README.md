@@ -1,9 +1,27 @@
 # My setup for Windows installs
 
-- Execute [Talon](https://github.com/ravendevteam/talon) de-bloat procedure
-- Install [PowerToys](https://github.com/microsoft/PowerToys)
-- Install [Raycast](https://www.raycast.com/windows)
-- Install [Lively Wallpaper](https://github.com/rocksdanister/lively)
+To install these settings **execute this command in an administrator PowerShell window**:
+
+```ps1
+irm https://www.mathias.gg/script/win_setup.ps1 | iex
+```
+
+## Things to do manually
+
+### Install these apps:
+
+- ClickMonitor
+- HWiNFO
+- Fan Control
+- Armoury Crate, NZXT Cam, RGB Fusion... and stuff like that
+- [Raycast](https://www.raycast.com/windows)
+- [Lively Wallpaper](https://github.com/rocksdanister/lively)
+- Google Drive
+- Figma
+- Abode Lightroom Classic & Photoshop
+- Linear, Notion
+- WSL
+- Docker
 
 ## Todo
 
