@@ -1,6 +1,6 @@
-# My setup for Windows installs
+# My Windows setup procedure
 
-To install these settings **execute this command in an administrator PowerShell window**:
+Activate Windows using your key (or [Massgrave](https://github.com/massgravel/Microsoft-Activation-Scripts) for demonstration purposes). Then, install these settings by executing this command in an **administrator PowerShell window**:
 
 ```ps1
 irm https://www.mathias.gg/script/win_setup.ps1 | iex
@@ -10,12 +10,12 @@ irm https://www.mathias.gg/script/win_setup.ps1 | iex
 
 ### Install these apps:
 
+- [Lively Wallpaper](https://github.com/rocksdanister/lively)
+- [Raycast](https://www.raycast.com/windows)
 - ClickMonitor
-- HWiNFO
 - Fan Control
 - Armoury Crate, NZXT Cam, RGB Fusion... and stuff like that
-- [Raycast](https://www.raycast.com/windows)
-- [Lively Wallpaper](https://github.com/rocksdanister/lively)
+- HWiNFO
 - Google Drive
 - Figma
 - Abode Lightroom Classic & Photoshop
@@ -28,3 +28,4 @@ irm https://www.mathias.gg/script/win_setup.ps1 | iex
 - [ ] Document procedure for PowerToys config
 - [ ] Document procedure for Raycast
 - [ ] Document procedure for Lively Wallpaper
+- [ ] Document procedure for WSL/Git Bash
