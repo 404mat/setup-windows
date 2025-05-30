@@ -197,16 +197,36 @@ Set-SafeRegistry -KeyPath "HKCU:\Software\Microsoft\Windows\CurrentVersion\Polic
 
 Write-Host "Finished applying registry settings." -ForegroundColor Green
 
+# Download and set wallpaper
+$wallpaperUrl = "https://raw.githubusercontent.com/404mat/setup-windows/main/wallpaper.jpg"
+$wallpaperPath = "$env:USERPROFILE\Pictures\wallpaper.jpg"
+try {
+    Write-Host "Downloading wallpaper from $wallpaperUrl..." -ForegroundColor Yellow
+    Invoke-WebRequest -Uri $wallpaperUrl -OutFile $wallpaperPath -UseBasicParsing
+    Write-Host "Wallpaper downloaded successfully!" -ForegroundColor Green
+} catch {
+    Write-Error "Failed to download wallpaper: $($_.Exception.Message)"
+}
+# Set the downloaded wallpaper
+Add-Type @"
+using System.Runtime.InteropServices;
+public class Wallpaper {
+  [DllImport("user32.dll", SetLastError = true)]
+  public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+}
+"@
+# SPI_SETDESKWALLPAPER = 20, SPIF_UPDATEINIFILE = 0x01, SPIF_SENDCHANGE = 0x02
+[Wallpaper]::SystemParametersInfo(20, 0, $wallpaperPath, 3)
 
-# 2. Install Chocolatey and it's packages
+# Install Chocolatey and it's packages
 Write-Host "Installing Chocolatey and packages..." -ForegroundColor Yellow
 Install-Chocolatey
 Install-ChocolateyPackages -Packages $packageList
 
-# 3. Install Winget packages
+# Install Winget packages
 Install-WingetPackages -Packages $wingetPackageList
 
-# 4. WSL
+# WSL
 wsl --install Ubuntu --no-launch
 
 # Finalize setup
