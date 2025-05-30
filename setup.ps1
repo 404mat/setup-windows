@@ -5,22 +5,7 @@
 # --- Configuration ---
 $chocoInstallDir = "$env:ProgramData\chocolatey"  # Custom Chocolatey install location.
 $packageList = @(
-  @{ Name = "hwinfo"; Args = "" }
-  @{ Name = "vlc"; Args = "" }
-  @{ Name = "7zip"; Args = "" }
-  @{ Name = "powertoys"; Args = "" }
-  @{ Name = "zen-browser"; Args = "--pre" }
-  @{ Name = "googlechrome"; Args = "--ignore-checksums" }
-  @{ Name = "vscode"; Args = "" }
-  @{ Name = "plex"; Args = "" }
-  @{ Name = "spotify"; Args = "" }
-  @{ Name = "discord.install"; Args = "" }
-  @{ Name = "git"; Args = "" }
   @{ Name = "filezilla"; Args = "" }
-  @{ Name = "qbittorrent"; Args = "" }
-  @{ Name = "localsend"; Args = "" }
-  @{ Name = "docker-desktop"; Args = "" }
-  @{ Name = "translucenttb"; Args = "" }
 )
 $wingetPackageList = @(
     @{ Name = "TranslucentTB"; Source = "msstore" }
@@ -28,6 +13,23 @@ $wingetPackageList = @(
     @{ Name = "Rem0o.FanControl"; Source = "winget" }
     @{ Name = "Lively Wallpaper"; Source = "msstore" }
     @{ Name = "xanderfrangos.twinkletray"; Source = "winget" }
+    @{ Name = "GitHub.cli"; Source = "winget" }
+    @{ Name = "pnpm"; Source = "winget" }
+    @{ Name = "TranslucentTB"; Source = "msstore" }
+    @{ Name = "Docker.DockerDesktop"; Source = "winget" }
+    @{ Name = "LocalSend.LocalSend"; Source = "winget" }
+    @{ Name = "qBittorrent.qBittorrent"; Source = "winget" }
+    @{ Name = "Git.Git"; Source = "winget" }
+    @{ Name = "Spotify.Spotify"; Source = "winget" }
+    @{ Name = "Discord.Discord"; Source = "winget" }
+    @{ Name = "Plex.Plex"; Source = "winget" }
+    @{ Name = "Microsoft.VisualStudioCode"; Source = "winget" }
+    @{ Name = "Google.Chrome"; Source = "winget" }
+    @{ Name = "Zen-Team.Zen-Browser"; Source = "winget" }
+    @{ Name = "Microsoft.PowerToys"; Source = "winget" }
+    @{ Name = "7zip.7zip"; Source = "winget" }
+    @{ Name = "VideoLAN.VLC"; Source = "winget" }
+    @{ Name = "REALiX.HWiNFO"; Source = "winget" }
 )
 
 # --- Function Definitions  ---
