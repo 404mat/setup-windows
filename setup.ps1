@@ -3,22 +3,21 @@
 # Script for initial Windows setup: Customize settings, install Chocolatey, and packages...
 
 # --- Configuration ---
-$chocoInstallDir = "C:\Chocolatey"  # Custom Chocolatey install location.
-$packageList = @(  # Add desired Chocolatey packages here.
-  "hwinfo",
-  "vlc",
-  "7zip",
-  "powertoys",
-  "zen-browser",
-  "googlechrome",
-  "vscode",
-  "microsoft-windows-terminal",
-  "plex",
-  "spotify",
-  "discord.install",
-  "git",
-  "filezilla",
-  "qbittorrent"
+$chocoInstallDir = "$env:ProgramData\chocolatey"  # Custom Chocolatey install location.
+$packageList = @(
+  @{ Name = "hwinfo"; Args = "" }
+  @{ Name = "vlc"; Args = "" }
+  @{ Name = "7zip"; Args = "" }
+  @{ Name = "powertoys"; Args = "" }
+  @{ Name = "zen-browser"; Args = "--pre" }
+  @{ Name = "googlechrome"; Args = "--ignore-checksums" }
+  @{ Name = "vscode"; Args = "" }
+  @{ Name = "plex"; Args = "" }
+  @{ Name = "spotify"; Args = "" }
+  @{ Name = "discord.install"; Args = "" }
+  @{ Name = "git"; Args = "" }
+  @{ Name = "filezilla"; Args = "" }
+  @{ Name = "qbittorrent"; Args = "" }
 )
 
 # --- Function Definitions  ---
@@ -34,14 +33,14 @@ function Set-SafeRegistry {
 
     try {
         # Check if the key exists
-        if (!(Test-Path -Path "Registry::$KeyPath")) {
+        if (!(Test-Path -Path $KeyPath)) {
             # Create the key if it doesn't exist
             Write-Host "Creating registry key: $KeyPath" -ForegroundColor Yellow
-            New-Item -Path "Registry::$KeyPath" -ItemType Directory -Force | Out-Null
+            New-Item -Path $KeyPath -ItemType Directory -Force | Out-Null
         }
 
         # Try to set the registry value with the specified type
-        Set-ItemProperty -Path "Registry::$KeyPath" -Name $ValueName -Value $ValueData -Type $ValueType -Force
+        Set-ItemProperty -Path $KeyPath -Name $ValueName -Value $ValueData -Type $ValueType -Force
 
         # Success Message
         Write-Host "Set Registry: $KeyPath\$ValueName to $ValueData (Type: $ValueType)" -ForegroundColor Green
@@ -52,64 +51,68 @@ function Set-SafeRegistry {
     }
 }
 
-# Function: Install Chocolatey
 function Install-Chocolatey {
     try {
-        # Check if already installed
         if (Get-Command choco -ErrorAction SilentlyContinue) {
-          Write-Host "Chocolatey is already installed." -ForegroundColor Green
-          return # exit install function
+            Write-Host "Chocolatey is already installed." -ForegroundColor Green
+            return
         }
         Write-Host "Installing Chocolatey..." -ForegroundColor Yellow
 
-         # Ensure the installation directory exists.
-        if (!(Test-Path -Path $chocoInstallDir )) {
-            New-Item -ItemType Directory -Path $chocoInstallDir
+        # Set TLS 1.2
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
+
+        # Bypass execution policy for this session only
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+
+        # Run official install script
+        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+        # Add Chocolatey bin folder to current session PATH
+        $chocoBin = "$env:ProgramData\chocolatey\bin"
+        if (-not ($env:PATH -split ';' | Where-Object { $_ -eq $chocoBin })) {
+            $env:PATH += ";$chocoBin"
+            Write-Host "Added Chocolatey bin directory to PATH for this session." -ForegroundColor Yellow
         }
 
-      # Define TLS for compatibility
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityPointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12;
-        Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) -InstallDir $chocoInstallDir;
-
-        # Add Chocolatey to the PATH. This persists
-        $envPath = [Environment]::GetEnvironmentVariable("PATH", "Machine")
-        if (-not $envPath.Contains("$chocoInstallDir\bin")) {
-            [Environment]::SetEnvironmentVariable("PATH", "$envPath;$chocoInstallDir\bin", "Machine")
-            Write-Host "Chocolatey bin directory added to PATH (machine scope). Restart your new and future sessions to properly connect choco!" -ForegroundColor Yellow
-        }
-        else {
-           Write-Host "Chocolatey already in PATH" -ForegroundColor Green
-        }
-
-        Write-Host "Chocolatey installation complete!" -ForegroundColor Green
-
+        Write-Host "Chocolatey installation complete! Restart your shell to use 'choco' command." -ForegroundColor Green
     }
     catch {
         Write-Error "Chocolatey installation failed: $($_.Exception.Message)"
-        exit 1 # stop all execution for critical error
+        exit 1
     }
 }
 
-# Function: Install Chocolatey Packages
 function Install-ChocolateyPackages {
     param (
-        [string[]]$Packages # accept from variable
+        [Parameter(Mandatory = $true)]
+        [array]$Packages
     )
+    
     Write-Host "Installing Chocolatey packages..." -ForegroundColor Yellow
-    foreach ($package in $Packages) {
-        Write-Host "Installing '$package'..." -ForegroundColor Green
+    
+    foreach ($pkg in $Packages) {
+        $args = if ([string]::IsNullOrWhiteSpace($pkg.Args)) { @() } else { $pkg.Args.Split(" ") }
+        Write-Host "Installing '$($pkg.Name)' with args '$($pkg.Args)'..." -ForegroundColor Green
+
         try {
-            choco install $package -y --source="'https://community.chocolatey.org/api/v2/'"
-            if ($LASTEXITCODE -ne 0) {
-                Write-Warning "'$package' installation failed with exit code $($LASTEXITCODE)."
+            $argsList = @("install", $pkg.Name, "-y")
+            if ($args.Length -gt 0) {
+                $argsList += $args
+            }
+
+            $process = Start-Process -FilePath "choco" -ArgumentList $argsList -Wait -NoNewWindow -PassThru
+            if ($process.ExitCode -ne 0) {
+                Write-Warning "'$($pkg.Name)' installation failed with exit code $($process.ExitCode)."
             } else {
-                Write-Host "'$package' installed successfully!" -ForegroundColor Green
+                Write-Host "'$($pkg.Name)' installed successfully!" -ForegroundColor Green
             }
         }
         catch {
-            Write-Error "Error installing '$package': $($_.Exception.Message)"
+            Write-Error "Error installing '$($pkg.Name)': $($_.Exception.Message)"
         }
     }
+    
     Write-Host "Chocolatey package installation complete!" -ForegroundColor Green
 }
 
@@ -125,7 +128,7 @@ Set-SafeRegistry -KeyPath "HKLM:\SOFTWARE\Microsoft\SQMClient" -ValueName "CEIPE
 
 ## Disable Scheduled Defrag ##  (Good for SSD systems)
 Set-SafeRegistry -KeyPath "HKLM:\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction" -ValueName "Enable" -ValueData "N" -ValueType String
-Set-SafeRegistry -KeyPath "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\Microsoft\Windows\Defrag" -ValueName "Action" -ValueData "{18294FA6-EB8F-4A1A-A943-66B4C9780E6D}" -ValueType String
+Disable-ScheduledTask -TaskName "ScheduledDefrag" -TaskPath "\Microsoft\Windows\Defrag\"
 
 ## Disable Windows Tips  ## Windows tries to show helpful tips, many users find annoying
 Set-SafeRegistry -KeyPath "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -ValueName "SilentInstalledAppsEnabled" -ValueData 0 -ValueType DWord
