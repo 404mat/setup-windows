@@ -22,6 +22,13 @@ $packageList = @(
   @{ Name = "docker-desktop"; Args = "" }
   @{ Name = "translucenttb"; Args = "" }
 )
+$wingetPackageList = @(
+    @{ Name = "TranslucentTB"; Source = "msstore" }
+    @{ Name = "WhatsApp"; Source = "msstore" }
+    @{ Name = "Rem0o.FanControl"; Source = "winget" }
+    @{ Name = "Lively Wallpaper"; Source = "msstore" }
+    @{ Name = "xanderfrangos.twinkletray"; Source = "winget" }
+)
 
 # --- Function Definitions  ---
 
@@ -119,6 +126,31 @@ function Install-ChocolateyPackages {
     Write-Host "Chocolatey package installation complete!" -ForegroundColor Green
 }
 
+function Install-WingetPackages {
+    param (
+        [Parameter(Mandatory = $true)]
+        [hashtable[]]$Packages
+    )
+    Write-Host "Installing Winget packages..." -ForegroundColor Yellow
+    foreach ($pkg in $Packages) {
+        $name = $pkg.Name
+        $source = $pkg.Source
+        Write-Host "Installing '$name' from source '$source'..." -ForegroundColor Green
+        try {
+            winget install $name -s $source --accept-package-agreements --accept-source-agreements -h --silent
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warning "'$name' installation failed with exit code $LASTEXITCODE."
+            } else {
+                Write-Host "'$name' installed successfully!" -ForegroundColor Green
+            }
+        }
+        catch {
+            Write-Error "Error installing '$name': $($_.Exception.Message)"
+        }
+    }
+    Write-Host "Winget package installation complete!" -ForegroundColor Green
+}
+
 # --- Main Script Execution ---
 
 # 1. Customize Windows Settings
@@ -171,7 +203,10 @@ Write-Host "Installing Chocolatey and packages..." -ForegroundColor Yellow
 Install-Chocolatey
 Install-ChocolateyPackages -Packages $packageList
 
-# 3. WSL
+# 3. Install Winget packages
+Install-WingetPackages -Packages $wingetPackageList
+
+# 4. WSL
 wsl --install Ubuntu --no-launch
 
 # Finalize setup

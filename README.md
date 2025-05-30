@@ -10,10 +10,7 @@ irm https://mathias.gg/setup.ps1 | iex
 
 ### Install these apps:
 
-- [Lively Wallpaper](https://github.com/rocksdanister/lively)
 - [Raycast](https://www.raycast.com/windows)
-- ClickMonitor
-- Fan Control
 - Armoury Crate, NZXT Cam, RGB Fusion... and stuff like that
 - Google Drive
 - Lightroom Classic & Photoshop, Affinity software, Figma
