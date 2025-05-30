@@ -16,12 +16,8 @@ irm https://mathias.gg/setup.ps1 | iex
 - Fan Control
 - Armoury Crate, NZXT Cam, RGB Fusion... and stuff like that
 - Google Drive
-- Figma
-- Adobe Lightroom Classic & Photoshop
-- Affinity Software
+- Lightroom Classic & Photoshop, Affinity software, Figma
 - Linear, Notion
-- WSL
-- Docker
 
 ## Todo
 

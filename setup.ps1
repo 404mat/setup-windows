@@ -18,6 +18,9 @@ $packageList = @(
   @{ Name = "git"; Args = "" }
   @{ Name = "filezilla"; Args = "" }
   @{ Name = "qbittorrent"; Args = "" }
+  @{ Name = "localsend"; Args = "" }
+  @{ Name = "docker-desktop"; Args = "" }
+  @{ Name = "translucenttb"; Args = "" }
 )
 
 # --- Function Definitions  ---
@@ -168,6 +171,9 @@ Write-Host "Installing Chocolatey and packages..." -ForegroundColor Yellow
 Install-Chocolatey
 Install-ChocolateyPackages -Packages $packageList
 
-# 3. Finalize setup
-refreshenv
+# 3. WSL
+wsl --install Ubuntu --no-launch
+
+# Finalize setup
+refreshenv # Refresh Chocolatey environment variables
 Write-Host "Windows setup script completed!" -ForegroundColor Green
