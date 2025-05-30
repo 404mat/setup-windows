@@ -19,11 +19,13 @@ $wingetPackageList = @(
     @{ Name = "Lively Wallpaper"; Source = "msstore" }
     @{ Name = "xanderfrangos.twinkletray"; Source = "winget" }
     @{ Name = "LocalSend.LocalSend"; Source = "winget" }
+    @{ Name = "Armin2208.WindowsAutoNightMode"; Source = "winget" }
 
     # Social
     @{ Name = "WhatsApp"; Source = "msstore" }
 
     # CLI Tools
+    @{ Name = "Fastfetch-cli.Fastfetch"; Source = "winget" }
     @{ Name = "GitHub.cli"; Source = "winget" }
     @{ Name = "pnpm"; Source = "winget" }
     @{ Name = "Git.Git"; Source = "winget" }
@@ -52,6 +54,9 @@ $wingetPackageList = @(
     @{ Name = "Google.Chrome"; Source = "winget" }
     @{ Name = "Zen-Team.Zen-Browser"; Source = "winget" }
 )
+
+$dotfilesNames = @(".gitconfig", ".gitignore", ".zshrc")
+$dotfilesUrl = "https://raw.githubusercontent.com/404mat/setup-mac/refs/heads/main/dotfiles"
 
 # --- Function Definitions  ---
 
@@ -174,6 +179,25 @@ function Install-WingetPackages {
     Write-Host "Winget package installation complete!" -ForegroundColor Green
 }
 
+function Download-Dotfiles {
+    param (
+        [string]$dotfilesUrl,
+        [string[]]$dotfilesNames
+    )
+
+    foreach ($name in $dotfilesNames) {
+        $url = "${dotfilesUrl}/${name}"
+        $destination = "$HOME\$name"
+
+        try {
+            Invoke-WebRequest -Uri $url -OutFile $destination -UseBasicParsing
+            Write-Host "Downloaded '$name' to '$destination'" -ForegroundColor Green
+        } catch {
+            Write-Error "Failed to download '$url': $($_.Exception.Message)"
+        }
+    }
+}
+
 # --- Main Script Execution ---
 
 # 1. Customize Windows Settings
@@ -248,6 +272,10 @@ Install-ChocolateyPackages -Packages $packageList
 
 # Install Winget packages
 Install-WingetPackages -Packages $wingetPackageList
+
+# Download dotfiles
+Write-Host "Downloading dotfiles..." -ForegroundColor Yellow
+Download-Dotfiles -dotfilesUrl $dotfilesUrl -dotfilesNames $dotfilesNames
 
 # WSL
 wsl --install Ubuntu --no-launch
