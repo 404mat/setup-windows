@@ -3,7 +3,7 @@
 Activate Windows using your key (or [Massgrave](https://github.com/massgravel/Microsoft-Activation-Scripts) for demonstration purposes). Then, install these settings by executing this command in an **administrator PowerShell window**:
 
 ```ps1
-irm https://www.mathias.gg/script/win_setup.ps1 | iex
+irm https://mathias.gg/setup.ps1 | iex
 ```
 
 ## Things to do manually
