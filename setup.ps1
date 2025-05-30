@@ -168,5 +168,6 @@ Write-Host "Installing Chocolatey and packages..." -ForegroundColor Yellow
 Install-Chocolatey
 Install-ChocolateyPackages -Packages $packageList
 
-
+# 3. Finalize setup
+refreshenv
 Write-Host "Windows setup script completed!" -ForegroundColor Green

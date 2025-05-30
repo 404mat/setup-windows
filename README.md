@@ -15,10 +15,10 @@ irm https://mathias.gg/setup.ps1 | iex
 - ClickMonitor
 - Fan Control
 - Armoury Crate, NZXT Cam, RGB Fusion... and stuff like that
-- HWiNFO
 - Google Drive
 - Figma
-- Abode Lightroom Classic & Photoshop
+- Adobe Lightroom Classic & Photoshop
+- Affinity Software
 - Linear, Notion
 - WSL
 - Docker
