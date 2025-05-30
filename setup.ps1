@@ -8,28 +8,49 @@ $packageList = @(
   @{ Name = "filezilla"; Args = "" }
 )
 $wingetPackageList = @(
-    @{ Name = "TranslucentTB"; Source = "msstore" }
-    @{ Name = "WhatsApp"; Source = "msstore" }
+    # tools
+    @{ Name = "REALiX.HWiNFO"; Source = "winget" }
     @{ Name = "Rem0o.FanControl"; Source = "winget" }
+    @{ Name = "Microsoft.PowerToys"; Source = "winget" }
+    @{ Name = "7zip.7zip"; Source = "winget" }
+
+    # UX
+    @{ Name = "TranslucentTB"; Source = "msstore" }
     @{ Name = "Lively Wallpaper"; Source = "msstore" }
     @{ Name = "xanderfrangos.twinkletray"; Source = "winget" }
+    @{ Name = "LocalSend.LocalSend"; Source = "winget" }
+
+    # Social
+    @{ Name = "WhatsApp"; Source = "msstore" }
+
+    # CLI Tools
     @{ Name = "GitHub.cli"; Source = "winget" }
     @{ Name = "pnpm"; Source = "winget" }
-    @{ Name = "TranslucentTB"; Source = "msstore" }
-    @{ Name = "Docker.DockerDesktop"; Source = "winget" }
-    @{ Name = "LocalSend.LocalSend"; Source = "winget" }
-    @{ Name = "qBittorrent.qBittorrent"; Source = "winget" }
     @{ Name = "Git.Git"; Source = "winget" }
+    @{ Name = "astral-sh.uv"; Source = "winget" }
+    @{ Name = "Schniz.fnm"; Source = "winget" }
+
+    # Dev tools
+    @{ Name = "Docker.DockerDesktop"; Source = "winget" }
+    @{ Name = "Microsoft.VisualStudioCode"; Source = "winget" }
+    @{ Name = "Yaak.app"; Source = "winget" }
+
+    # Content tools
+    @{ Name = "Figma.Figma"; Source = "winget" }
+    @{ Name = "ogdesign.Eagle"; Source = "winget" }
+    @{ Name = "Notion.Notion"; Source = "winget" }
+    @{ Name = "Google.GoogleDrive"; Source = "winget" }
+
+    # Entertainment
+    @{ Name = "qBittorrent.qBittorrent"; Source = "winget" }
     @{ Name = "Spotify.Spotify"; Source = "winget" }
     @{ Name = "Discord.Discord"; Source = "winget" }
     @{ Name = "Plex.Plex"; Source = "winget" }
-    @{ Name = "Microsoft.VisualStudioCode"; Source = "winget" }
+    @{ Name = "VideoLAN.VLC"; Source = "winget" }
+
+    # Browsers
     @{ Name = "Google.Chrome"; Source = "winget" }
     @{ Name = "Zen-Team.Zen-Browser"; Source = "winget" }
-    @{ Name = "Microsoft.PowerToys"; Source = "winget" }
-    @{ Name = "7zip.7zip"; Source = "winget" }
-    @{ Name = "VideoLAN.VLC"; Source = "winget" }
-    @{ Name = "REALiX.HWiNFO"; Source = "winget" }
 )
 
 # --- Function Definitions  ---
