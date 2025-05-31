@@ -26,10 +26,11 @@ $wingetPackageList = @(
     # CLI Tools
     @{ Name = "Fastfetch-cli.Fastfetch"; Source = "winget" }
     @{ Name = "GitHub.cli"; Source = "winget" }
-    @{ Name = "pnpm"; Source = "winget" }
+    @{ Name = "pnpm.pnpm"; Source = "winget" }
     @{ Name = "Git.Git"; Source = "winget" }
     @{ Name = "astral-sh.uv"; Source = "winget" }
     @{ Name = "Schniz.fnm"; Source = "winget" }
+    @{ Name = "StephanDilly.gitui"; Source = "winget" }
 
     # Dev tools
     @{ Name = "Docker.DockerDesktop"; Source = "winget" }
