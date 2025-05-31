@@ -9,7 +9,6 @@ $packageList = @(
 )
 $wingetPackageList = @(
     # tools
-    @{ Name = "REALiX.HWiNFO"; Source = "winget" }
     @{ Name = "Rem0o.FanControl"; Source = "winget" }
     @{ Name = "Microsoft.PowerToys"; Source = "winget" }
     @{ Name = "7zip.7zip"; Source = "winget" }
