@@ -1,6 +1,4 @@
-eval "$(ssh-agent -s)" > /dev/null 2>&1
-ssh-add ~/.ssh/github_mathias-pc > /dev/null 2>&1
-
+export GIT_SSH=C:/Windows/System32/OpenSSH/ssh.exe
 
 fastfetch
 
