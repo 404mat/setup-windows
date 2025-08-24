@@ -41,6 +41,7 @@ $wingetPackageList = @(
     @{ Name = "Figma.Figma"; Source = "winget" }
     @{ Name = "ogdesign.Eagle"; Source = "winget" }
     @{ Name = "Notion.Notion"; Source = "winget" }
+    @{ Name = "Notion.NotionCalendar"; Source = "winget" }
     @{ Name = "Google.GoogleDrive"; Source = "winget" }
 
     # Entertainment
