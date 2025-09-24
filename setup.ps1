@@ -199,6 +199,56 @@ function Download-Dotfiles {
     }
 }
 
+function Create-ScheduledTask {
+    param (
+        [string]$TaskName,
+        [string]$Command,
+        [string]$Schedule = "ONLOGON",
+        [string]$RunLevel = "HIGHEST"
+    )
+
+    Write-Host "Creating scheduled task: $TaskName" -ForegroundColor Yellow
+    try {
+        $taskAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$Command`""
+        $taskTrigger = New-ScheduledTaskTrigger -AtLogOn
+        $taskPrincipal = New-ScheduledTaskPrincipal -UserId "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel $RunLevel
+        $taskSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -DontStopOnIdleEnd
+        
+        Register-ScheduledTask -TaskName $TaskName -Action $taskAction -Trigger $taskTrigger -Principal $taskPrincipal -Settings $taskSettings -Force -ErrorAction Stop
+        Write-Host "Scheduled task '$TaskName' created successfully." -ForegroundColor Green
+    }
+    catch {
+        Write-Error "Failed to create scheduled task '$TaskName': $($_.Exception.Message)"
+    }
+}
+
+function Download-File {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$Url,
+
+        [Parameter(Mandatory=$true)]
+        [string]$DestinationPath
+    )
+
+    try {
+        # Ensure the destination directory exists
+        $destinationDir = Split-Path -Path $DestinationPath -Parent
+        if (-not (Test-Path -Path $destinationDir)) {
+            Write-Host "Creating directory: $destinationDir" -ForegroundColor Yellow
+            New-Item -Path $destinationDir -ItemType Directory -Force | Out-Null
+        }
+
+        # Download the file
+        Write-Host "Downloading file from $Url to $DestinationPath..." -ForegroundColor Yellow
+        Invoke-WebRequest -Uri $Url -OutFile $DestinationPath -UseBasicParsing
+        Write-Host "File downloaded successfully." -ForegroundColor Green
+    }
+    catch {
+        Write-Error "Failed to download file from '$Url': $($_.Exception.Message)"
+    }
+}
+
 # --- Main Script Execution ---
 
 # 1. Customize Windows Settings
@@ -280,6 +330,10 @@ Download-Dotfiles -dotfilesUrl $dotfilesUrl -dotfilesNames $dotfilesNames
 
 # WSL
 wsl --install Ubuntu --no-launch
+
+# Create Scheduled Task to kill desktop shortcuts
+Download-File -Url "https://raw.githubusercontent.com/404mat/setup-windows/main/scripts/delete_desktop_shortcuts.ps1" -DestinationPath "C:\scripts\delete_desktop_shortcuts.ps1"
+Create-ScheduledTask -TaskName "KillDesktopShortcuts" -Command "C:\scripts\delete_desktop_shortcuts.ps1"
 
 # Finalize setup
 refreshenv # Refresh Chocolatey environment variables
